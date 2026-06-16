@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimentação de EPI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body> 
+
+    <div class="app-container">
+
+        <div class="hero-header">
+            <div class="hero-left">
+                <div class="hero-icon">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                </div>
+                <div>
+                    <h1>Movimentação de EPI</h1>
+                    <p>Sistema Digital de Almoxarifado</p>
+                </div>
+            </div>
+            <div class="hero-clock">
+                <span id="currentDate"></span>
+                <span id="currentTime"></span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                <span>Movimentação</span>
+                <strong id="dashTipo">Retirada</strong>
+            </div>
+            <div class="dashboard-card">
+                <i class="fa-solid fa-box"></i>
+                <span>Itens</span>
+                <strong id="dashItens">0</strong>
+            </div>
+            <div class="dashboard-card">
+                <i class="fa-solid fa-user-check"></i>
+                <span>Validação</span>
+                <strong id="dashValidacao">Pendente</strong>
+            </div>
+            <div class="dashboard-card">
+                <i class="fa-solid fa-file-circle-check"></i>
+                <span>Status</span>
+                <strong>Em Edição</strong>
+            </div>
+        </div>
+
+        <form id="movimentacaoEPIForm">
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-user"></i>
+                        Colaborador
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="field field-matricula">
+                        <label for="matricula">Matrícula *</label>
+                        <div class="search-group">
+                            <input
+                                type="text"
+                                id="matricula"
+                                name="matricula"
+                                placeholder="Digite a matrícula">
+                            <button
+                                type="button"
+                                id="btnBuscarColaborador">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="employee-summary">
+                        <div class="employee-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="employee-content">
+                            <h3 id="employeeName">Nenhum colaborador selecionado</h3>
+                            <p id="employeeRole">Cargo não informado</p>
+                            <p id="employeeSector">Setor não informado</p>
+
+                            <input type="hidden" id="nomeColaborador" name="nomeColaborador">
+                            <input type="hidden" id="cargoColaborador" name="cargoColaborador">
+                            <input type="hidden" id="setorColaborador" name="setorColaborador">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        Tipo de Movimentação
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="tipo-grid">
+                        <button
+                            type="button"
+                            class="tipo-btn active"
+                            data-tipo="RETIRADA">
+                            Retirada
+                        </button>
+                        <button
+                            type="button"
+                            class="tipo-btn"
+                            data-tipo="DEVOLUCAO">
+                            Devolução
+                        </button>
+                        <button
+                            type="button"
+                            class="tipo-btn"
+                            data-tipo="TROCA">
+                            Troca
+                        </button>
+                        <button
+                            type="button"
+                            class="tipo-btn"
+                            data-tipo="TROCA_PROGRAMADA">
+                            Troca Programada
+                        </button>
+                    </div>
+                    <input
+                        type="hidden"
+                        id="tipoMovimentacao"
+                        name="tipoMovimentacao"
+                        value="RETIRADA">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-box-open"></i>
+                        Adicionar Item
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="buscaItem">Buscar Item</label>
+                            <div class="input-icon">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input
+                                    type="text"
+                                    id="buscaItem"
+                                    placeholder="Digite CAL, BOT, LUV...">
+                            </div>
+                            <div id="sugestoesItens" class="sugestoes-container"></div>
+                        </div>
+                        <div class="field">
+                            <label for="quantidade">Quantidade</label>
+                            <div class="quantity-box">
+                                <button type="button" id="btnMenos">-</button>
+                                <input
+                                    type="text"
+                                    id="quantidade"
+                                    value="1"
+                                    readonly>
+                                <button type="button" id="btnMais">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        id="btnAdicionarItem"
+                        class="btn-primary">
+                        Adicionar Item
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        Itens da Movimentação
+                    </h2>
+                </div>
+                <div id="listaItens" class="lista-itens">
+                    <div class="empty-state">
+                        Nenhum item adicionado
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-camera"></i>
+                        Validação Facial
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="status-validacao">
+                        <span id="statusBiometria" class="status-badge pending">Pendente</span>
+                    </div>
+                    <button
+                        type="button"
+                        id="btnBiometria"
+                        class="btn-secondary">
+                        Validar Colaborador
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fa-solid fa-file-lines"></i>
+                        Observações
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <textarea
+                        id="observacoes"
+                        rows="4"
+                        placeholder="Observações da movimentação"></textarea>
+                </div>
+            </div>
+
+            <div class="footer-actions">
+                <button
+                    type="button"
+                    id="btnFinalizar"
+                    class="btn-success">
+                    <i class="fa-solid fa-check"></i>
+                    Finalizar Movimentação
+                </button>
+            </div>
+
+        </form>
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
